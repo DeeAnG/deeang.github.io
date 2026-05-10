@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Главный экран</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      background: #ffffff;
+      font-family: 'Onest', sans-serif;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      border-bottom-left-radius: 80px;
+      border-bottom-right-radius: 80px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    #bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+    }
+
+    #container {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+      padding: 0 20px;
+      z-index: 1;
+      color: #fff;
+    }
+
+    h1 {
+      font-weight: 400;
+      font-size: 64px;
+      margin: 0;
+    }
+
+    p {
+      font-weight: 200;
+      font-size: 24px;
+      line-height: 40px;
+      margin-top: 64px;
+    }
+
+    .gradient-text-h1 {
+      background: linear-gradient(-98deg, #ffffff, #FF4D00, #DD00FF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      font-weight: 700;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 24px;
+      margin-top: 48px;
+      margin-bottom: 140px;
+    }
+
+    button {
+      height: 64px;
+      border-radius: 24px;
+      border: none;
+      padding: 0 48px;
+      font-family: 'Onest', sans-serif;
+      font-size: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    button:first-child {
+      background: linear-gradient(-98deg, #ffffff, #FF4D00, #DD00FF);
+      color: white;
+    }
+
+    button:first-child:hover {
+      background: linear-gradient(-98deg, #DD00FF, #FF4D00, #ffffff);
+    }
+
+    button:last-child {
+      background-color: #EEEDF1;
+      color: #000;
+    }
+
+    button:last-child:hover {
+      background-color: #000;
+      color: #fff;
+    }
+
+    .next-section {
+      background: #fff;
+      color: #111;
+      padding: 96px 20px;
+    }
+
+    .next-section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .next-section h2 {
+      margin: 0 0 20px 0;
+      font-size: 42px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .next-section p {
+      margin: 0;
+      color: #444;
+      font-size: 20px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <canvas id="bg"></canvas>
+    <div id="container">
+      <h1 style="max-width: 1200px; text-align: center;">Аренда <span class="gradient-text-h1">интерактивного оборудования</span> для мероприятий</h1>
+      <p style="max-width: 1000px; text-align: center;">Мы поможем вам подобрать интерактив, забрендируем, доставим, смонтируем и смодерируем на площадке</p>
+      <div class="buttons">
+        <button>Узнать больше</button>
+        <button>Связаться с нами</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="next-section">
+    <div class="next-section-inner">
+      <h2>Следующий блок контента</h2>
+      <p>Здесь можно разместить карточки услуг, преимущества, кейсы или любую другую информацию на белом фоне.</p>
+    </div>
+  </section>
+
+  <script type="module">
+    import { NeatGradient } from "https://esm.sh/@firecms/neat@0.8.0";
+
+    const canvas = document.getElementById("bg");
+    const hero = document.querySelector(".hero");
+
+    if (canvas && hero) {
+      const gradient = new NeatGradient({
+        ref: canvas,
+        colors: [
+          { color: "#040F2A", enabled: true },
+          { color: "#070081", enabled: true },
+          { color: "#230058", enabled: false },
+          { color: "#610099", enabled: true },
+          { color: "#EE9B00", enabled: false }
+        ],
+        speed: 4.5,
+        horizontalPressure: 5,
+        verticalPressure: 7,
+        waveFrequencyX: 2,
+        waveFrequencyY: 2,
+        waveAmplitude: 8,
+        shadows: 6,
+        highlights: 5,
+        colorBrightness: 1.4,
+        colorSaturation: 7,
+        colorBlending: 10,
+        backgroundColor: "#000",
+        backgroundAlpha: 1,
+        resolution: 1
+      });
+
+      const mouse = {
+        mouseDistortionStrength: 0.35,
+        mouseDistortionRadius: 0.25,
+        mouseDecayRate: 0.96,
+        mouseDarken: 0.2
+      };
+
+      let targetX = 0.5;
+      let targetY = 0.5;
+      let currentX = 0.5;
+      let currentY = 0.5;
+      let active = false;
+
+      const base = {
+        waveAmplitude: 8,
+        shadows: 6,
+        highlights: 5,
+        colorBrightness: 1.4
+      };
+
+      function setTargetFromEvent(event) {
+        const rect = hero.getBoundingClientRect();
+        targetX = (event.clientX - rect.left) / rect.width;
+        targetY = (event.clientY - rect.top) / rect.height;
+        targetX = Math.max(0, Math.min(1, targetX));
+        targetY = Math.max(0, Math.min(1, targetY));
+      }
+
+      hero.addEventListener("mouseenter", () => {
+        active = true;
+      });
+
+      hero.addEventListener("mousemove", setTargetFromEvent);
+
+      hero.addEventListener("mouseleave", () => {
+        active = false;
+        targetX = 0.5;
+        targetY = 0.5;
+      });
+
+      function animateMouseReaction() {
+        const lerp = active ? (1 - mouse.mouseDecayRate) : 0.03;
+        currentX += (targetX - currentX) * lerp;
+        currentY += (targetY - currentY) * lerp;
+
+        const dx = (currentX - 0.5) * 2;
+        const dy = (currentY - 0.5) * 2;
+        const dist = Math.hypot(dx, dy);
+        const radius = Math.max(0.001, mouse.mouseDistortionRadius * 2);
+        const influence = active
+          ? Math.max(0, 1 - dist / radius) * mouse.mouseDistortionStrength
+          : 0;
+
+        gradient.yOffset = currentY * 2200;
+        gradient.waveAmplitude = base.waveAmplitude + influence * 6;
+        gradient.shadows = base.shadows + influence * 2;
+        gradient.highlights = base.highlights + influence * 1.5;
+        gradient.colorBrightness = base.colorBrightness - influence * mouse.mouseDarken * 0.8;
+
+        requestAnimationFrame(animateMouseReaction);
+      }
+
+      requestAnimationFrame(animateMouseReaction);
+    }
+  </script>
+</body>
+</html>
